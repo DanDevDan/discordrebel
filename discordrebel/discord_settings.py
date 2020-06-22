@@ -38,8 +38,11 @@ def safe_direct_messaging_filter(token, filter=0):
     r = requests.patch('https://discord.com/api/v6/users/@me/settings', data=json.dumps(payload),
                        headers=setup_header(token))
 
-def set_avatar(token, imageurl):
-    image = base64.b64encode(requests.get(imageurl).content)
 
-    payload = {'avatar': 'data:image/png;base64,'+str(image)}
-    r = requests.patch('https://discord.com/api/v6/users/@me', data=json.dumps(payload), headers=setup_header(token))
+def set_avatar(token, imageurl):
+
+    encoded = base64.b64encode(requests.get(imageurl).content).decode('utf-8')
+
+    payload = {'avatar': 'data:image/png;base64,' + encoded}
+    r = requests.patch('https://discord.com/api/v6/users/@me', json=payload, headers=setup_header(token))
+
