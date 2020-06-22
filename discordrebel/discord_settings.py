@@ -40,9 +40,10 @@ def safe_direct_messaging_filter(token, filter=0):
 
 
 def set_avatar(token, imageurl):
-
     encoded = base64.b64encode(requests.get(imageurl).content).decode('utf-8')
-
     payload = {'avatar': 'data:image/png;base64,' + encoded}
     r = requests.patch('https://discord.com/api/v6/users/@me', json=payload, headers=setup_header(token))
 
+def set_language(token, language='en-US'):
+    payload = {'locale': language}
+    requests.patch('https://discord.com/api/v6/users/@me/settings', json=payload, headers=setup_header(token))

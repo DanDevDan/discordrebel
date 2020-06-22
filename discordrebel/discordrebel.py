@@ -29,3 +29,13 @@ class RebelClient:
     def set_avatar(self, imageurl):
         # Currently broken
         discord_settings.set_avatar(self.token, imageurl)
+
+    def get_account_info(self):
+        return common.get_account_info(self.token)
+
+    def set_language(self, language):
+        """Locale format, Example: en-US"""
+        discord_settings.set_language(self.token, language)
+
+    def send_message(self, message, channelid):
+        common.send_message(self.token, message, channelid)

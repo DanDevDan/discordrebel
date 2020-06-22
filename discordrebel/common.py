@@ -73,3 +73,12 @@ def set_game(token, game, type, status='online', twitchlink='twitch.com'):
     ws.send(json.dumps(auth))
 
 
+def get_account_info(token):
+    src = requests.get('https://discordapp.com/api/v6/users/@me', headers=setup_header(token), timeout=10)
+    response = json.loads(src.content)
+    info = {'username': response['username'], 'discriminator': response['discriminator'], 'id': response['id'], 'email': response['email'], 'phone': response['phone'], 'language': response['locale'], 'verified': response['verified']}
+    return info
+
+def send_message(token, message, channelid):
+    payload = {"content":message}
+    requests.post(f'https://discord.com/api/v6/channels/{channelid}/messages', json=payload, headers=setup_header(token))
