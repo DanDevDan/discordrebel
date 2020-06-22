@@ -16,9 +16,10 @@ def setup_header(token):
 
 
 def set_nickname(token, guildid, nickname):
-    payload = {'nick':nickname}
-    src = requests.patch(f'https://canary.discordapp.com/api/v6/guilds/{guildid}/members/@me/nick', headers=setup_header(token),
-                        json=payload, timeout=10)
+    payload = {'nick': nickname}
+    src = requests.patch(f'https://canary.discordapp.com/api/v6/guilds/{guildid}/members/@me/nick',
+                         headers=setup_header(token),
+                         json=payload, timeout=10)
 
 
 def set_game(token, game, type, status='online', twitchlink='twitch.com'):
@@ -67,6 +68,8 @@ def set_game(token, game, type, status='online', twitchlink='twitch.com'):
         },
         "s": None,
         "t": None
-        }
+    }
 
     ws.send(json.dumps(auth))
+
+
