@@ -5,7 +5,7 @@ An API wrapper for interacting with the Discord api, with focus on selfbots.
 ```py
 from discordrebel.discordrebel import RebelClient
 
-client = rebelclient(token)
+client = RebelClient(token)
 
 client.set_game('Coding', 'Playing', 'online')
 ```
