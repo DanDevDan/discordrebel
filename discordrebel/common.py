@@ -3,6 +3,7 @@ import websocket
 import sys
 import json
 import random
+import base64
 
 
 def setup_header(token):
@@ -17,9 +18,10 @@ def setup_header(token):
 
 def set_nickname(token, guildid, nickname):
     payload = {'nick': nickname}
-    src = requests.patch(f'https://canary.discordapp.com/api/v6/guilds/{guildid}/members/@me/nick',
+    r = requests.patch(f'https://canary.discordapp.com/api/v6/guilds/{guildid}/members/@me/nick',
                          headers=setup_header(token),
                          json=payload, timeout=10)
+    return json.loads(r.content)
 
 
 def set_game(token, game, type, status='online', twitchlink='twitch.com'):
@@ -84,8 +86,9 @@ def get_account_info(token):
 
 def send_message(token, message, channelid):
     payload = {"content": message}
-    requests.post(f'https://discord.com/api/v6/channels/{channelid}/messages', json=payload,
+    r = requests.post(f'https://discord.com/api/v6/channels/{channelid}/messages', json=payload,
                   headers=setup_header(token))
+    return json.loads(r.content)
 
 
 def send_dm(token, message, userid):
@@ -95,5 +98,22 @@ def send_dm(token, message, userid):
                         timeout=10)
     dm_json = json.loads(src.content)
     payload = {"content": message}
-    src = requests.post(f"https://canary.discordapp.com/api/v6/channels/{dm_json['id']}/messages", headers=setup_header(token),
-                       json=payload, timeout=10)
+    r = requests.post(f"https://canary.discordapp.com/api/v6/channels/{dm_json['id']}/messages",
+                        headers=setup_header(token),
+                        json=payload, timeout=10)
+    return json.loads(r.content)
+
+
+def create_server(token, name, iconurl=None, region='europe'):
+    if iconurl is not None:
+        encoded = base64.b64encode(requests.get(iconurl).content).decode('utf-8')
+        payload = {'icon': 'data:image/png;base64,' + encoded, 'name': name, 'region': region}
+    else:
+        payload = {'name': name, 'region': region}
+    r = requests.post('https://discord.com/api/v6/guilds', json=payload, headers=setup_header(token))
+    return json.loads(r.content)
+
+
+def delete_server(token, guildid):
+    r = requests.post(f'https://discord.com/api/v6/guilds/{guildid}/delete', json=[], headers=setup_header(token))
+    return json.loads(r.content)

@@ -25,25 +25,31 @@ def allow_direct_messages(token, option=True):
         payload = {'default_guilds_restricted': True, 'restricted_guilds': []}
         r = requests.patch('https://discord.com/api/v6/users/@me/settings', data=json.dumps(payload),
                            headers=setup_header(token))
+    return json.loads(r.content)
 
 
 def allow_all_friend_requests(token, option=True):
     payload = dict(friend_source_flags={"all": True, "mutual_friends": True, "mutual_guilds": True})
     r = requests.patch('https://discord.com/api/v6/users/@me/settings', data=json.dumps(payload),
                        headers=setup_header(token))
+    return json.loads(r.content)
 
 
 def safe_direct_messaging_filter(token, filter=0):
     payload = dict(explicit_content_filter=filter)
     r = requests.patch('https://discord.com/api/v6/users/@me/settings', data=json.dumps(payload),
                        headers=setup_header(token))
+    return json.loads(r.content)
 
 
 def set_avatar(token, imageurl):
     encoded = base64.b64encode(requests.get(imageurl).content).decode('utf-8')
     payload = {'avatar': 'data:image/png;base64,' + encoded}
     r = requests.patch('https://discord.com/api/v6/users/@me', json=payload, headers=setup_header(token))
+    return json.loads(r.content)
+
 
 def set_language(token, language='en-US'):
     payload = {'locale': language}
-    requests.patch('https://discord.com/api/v6/users/@me/settings', json=payload, headers=setup_header(token))
+    r = requests.patch('https://discord.com/api/v6/users/@me/settings', json=payload, headers=setup_header(token))
+    return json.loads(r.content)
