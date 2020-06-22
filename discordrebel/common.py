@@ -76,9 +76,24 @@ def set_game(token, game, type, status='online', twitchlink='twitch.com'):
 def get_account_info(token):
     src = requests.get('https://discordapp.com/api/v6/users/@me', headers=setup_header(token), timeout=10)
     response = json.loads(src.content)
-    info = {'username': response['username'], 'discriminator': response['discriminator'], 'id': response['id'], 'email': response['email'], 'phone': response['phone'], 'language': response['locale'], 'verified': response['verified']}
+    info = {'username': response['username'], 'discriminator': response['discriminator'], 'id': response['id'],
+            'email': response['email'], 'phone': response['phone'], 'language': response['locale'],
+            'verified': response['verified']}
     return info
 
+
 def send_message(token, message, channelid):
-    payload = {"content":message}
-    requests.post(f'https://discord.com/api/v6/channels/{channelid}/messages', json=payload, headers=setup_header(token))
+    payload = {"content": message}
+    requests.post(f'https://discord.com/api/v6/channels/{channelid}/messages', json=payload,
+                  headers=setup_header(token))
+
+
+def send_dm(token, message, userid):
+    payload = {'recipient_id': userid}
+    src = requests.post('https://canary.discordapp.com/api/v6/users/@me/channels', headers=setup_header(token),
+                        json=payload,
+                        timeout=10)
+    dm_json = json.loads(src.content)
+    payload = {"content": message}
+    src = requests.post(f"https://canary.discordapp.com/api/v6/channels/{dm_json['id']}/messages", headers=setup_header(token),
+                       json=payload, timeout=10)

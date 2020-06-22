@@ -38,4 +38,7 @@ class RebelClient:
         discord_settings.set_language(self.token, language)
 
     def send_message(self, message, channelid):
-        common.send_message(self.token, message, channelid)
+        common.send_message(self.token, message, str(channelid))
+
+    def send_dm(self, message, userid):
+        common.send_dm(self.token, message, str(userid))
