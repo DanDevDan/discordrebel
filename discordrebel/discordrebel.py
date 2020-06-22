@@ -43,9 +43,12 @@ class RebelClient:
     def send_dm(self, message, userid):
         return common.send_dm(self.token, message, str(userid))
 
+    def delete_message(self, channelid, messageid):
+        common.delete_message(self.token, channelid, messageid)
+
     def create_server(self, name, iconurl=None, region='europe'):
         """Only accepts PNG urls as icon"""
         return common.create_server(self.token, name, iconurl, region)
 
     def delete_server(self, guildid):
-        return common.delete_server(self.token, guildid)
+        common.delete_server(self.token, guildid)

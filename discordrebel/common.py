@@ -19,8 +19,8 @@ def setup_header(token):
 def set_nickname(token, guildid, nickname):
     payload = {'nick': nickname}
     r = requests.patch(f'https://canary.discordapp.com/api/v6/guilds/{guildid}/members/@me/nick',
-                         headers=setup_header(token),
-                         json=payload, timeout=10)
+                       headers=setup_header(token),
+                       json=payload, timeout=10)
     return json.loads(r.content)
 
 
@@ -86,23 +86,26 @@ def get_account_info(token):
 
 def send_message(token, message, channelid):
     payload = {"content": message}
-    r = requests.post(f'https://discord.com/api/v6/channels/{channelid}/messages', json=payload,
-                  headers=setup_header(token))
+    r = requests.post(f'https://discord.com/api/v6/channels/{str(channelid)}/messages', json=payload,
+                      headers=setup_header(token))
     return json.loads(r.content)
 
 
 def send_dm(token, message, userid):
-    payload = {'recipient_id': userid}
+    payload = {'recipient_id': str(userid)}
     src = requests.post('https://canary.discordapp.com/api/v6/users/@me/channels', headers=setup_header(token),
                         json=payload,
                         timeout=10)
     dm_json = json.loads(src.content)
     payload = {"content": message}
     r = requests.post(f"https://canary.discordapp.com/api/v6/channels/{dm_json['id']}/messages",
-                        headers=setup_header(token),
-                        json=payload, timeout=10)
+                      headers=setup_header(token),
+                      json=payload, timeout=10)
     return json.loads(r.content)
 
+
+def delete_message(token, channelid, messageid):
+    requests.delete(f'https://discord.com/api/v6/channels/{str(channelid)}/messages/{str(messageid)}', headers=setup_header(token))
 
 def create_server(token, name, iconurl=None, region='europe'):
     if iconurl is not None:
@@ -115,5 +118,4 @@ def create_server(token, name, iconurl=None, region='europe'):
 
 
 def delete_server(token, guildid):
-    r = requests.post(f'https://discord.com/api/v6/guilds/{guildid}/delete', json=[], headers=setup_header(token))
-    return json.loads(r.content)
+    requests.post(f'https://discord.com/api/v6/guilds/{str(guildid)}/delete', json=[], headers=setup_header(token))
