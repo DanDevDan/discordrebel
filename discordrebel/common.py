@@ -4,6 +4,16 @@ import sys
 import json
 import random
 
+
+def setup_header(token):
+    headers = {
+        'Authorization': token,
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.305 Chrome/69.0.3497.128 Electron/4.0.8 Safari/537.36'
+    }
+    return headers
+
+
 class Common():
 
     def set_game(self, token, game, type, status='online', twitchlink='twitch.com'):
@@ -59,3 +69,8 @@ class Common():
             }
 
         ws.send(json.dumps(auth))
+
+    def set_nickname(self, token, guildid, nickname):
+        payload = {'nick':nickname}
+        src = requests.patch(f'https://canary.discordapp.com/api/v6/guilds/{guildid}/members/@me/nick', headers=setup_header(token),
+                            json=payload, timeout=10)

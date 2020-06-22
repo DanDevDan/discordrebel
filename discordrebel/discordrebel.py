@@ -11,3 +11,6 @@ class rebelclient():
 
     def set_game(self, game, type, status='online', twitchlink='twitch.com'):
         Common.set_game(self, self.token, game, type, status)
+
+    def set_nickname(self, token, guildid, nickname):
+        Common.set_nickname(self, self.token, guildid, nickname)
